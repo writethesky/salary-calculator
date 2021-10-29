@@ -36,7 +36,7 @@ func main() {
 		Medical:                 20,
 		MedicalPlus:             3,
 		Birth:                   0,
-		Unemployment:            2,
+		Unemployment:            5,
 		IndustrialInjury:        0,
 		HousingAccumulationFund: 120,
 		FreeTax:                 60000,
@@ -48,7 +48,7 @@ func main() {
 		MedicalInput:            28,
 		MedicalPlus:             0,
 		Birth:                   8,
-		Unemployment:            10,
+		Unemployment:            5,
 		IndustrialInjury:        10,
 		HousingAccumulationFund: 120,
 		FreeTax:                 0,
@@ -72,6 +72,17 @@ func printResult(salary int, personResult, companyResult Calculate) {
 	fmt.Printf("%s %s %s %d\n", getStringOfLength("失业保险", 20), getStringOfLength(personResult.Unemployment, 10), getStringOfLength(companyResult.Unemployment, 10), personResult.Unemployment+companyResult.Unemployment)
 	fmt.Printf("%s %s %s %d\n", getStringOfLength("工伤保险", 20), getStringOfLength(personResult.IndustrialInjury, 10), getStringOfLength(companyResult.IndustrialInjury, 10), personResult.IndustrialInjury+companyResult.IndustrialInjury)
 	fmt.Printf("%s %s %s %d\n", getStringOfLength("住房公积金", 20), getStringOfLength(personResult.HousingAccumulationFund, 10), getStringOfLength(companyResult.HousingAccumulationFund, 10), personResult.HousingAccumulationFund+companyResult.HousingAccumulationFund)
+	fmt.Printf("%s %s %s %d\n", getStringOfLength("总计", 20),
+		getStringOfLength(personResult.Endowment+
+			personResult.Medical+
+			personResult.Birth+
+			personResult.Unemployment+
+			personResult.IndustrialInjury+personResult.HousingAccumulationFund, 10),
+		getStringOfLength(companyResult.Endowment+
+			companyResult.Medical+
+			companyResult.Birth+
+			companyResult.Unemployment+
+			companyResult.IndustrialInjury+companyResult.HousingAccumulationFund, 10), 0)
 	fmt.Println("\n税后工资")
 	fmt.Printf("%s %d\n", getStringOfLength("五险一金后工资", 20), personResult.InsuranceSalary)
 	fmt.Printf("%s %d\n", getStringOfLength("应缴纳个税", 20), personResult.Tax)
