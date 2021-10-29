@@ -21,6 +21,7 @@ type Rule struct {
 	Unemployment            int //失业保险比例
 	IndustrialInjury        int //工伤保险比例
 	HousingAccumulationFund int //住房公积金比例
+	BaseLimit               int // 五险一金缴存基数上限
 	FreeTax                 int //每年免税额度
 }
 
@@ -39,6 +40,7 @@ func main() {
 		Unemployment:            5,
 		IndustrialInjury:        0,
 		HousingAccumulationFund: 120,
+		BaseLimit:               28221,
 		FreeTax:                 60000,
 	}
 
@@ -51,6 +53,7 @@ func main() {
 		Unemployment:            5,
 		IndustrialInjury:        10,
 		HousingAccumulationFund: 120,
+		BaseLimit:               28221,
 		FreeTax:                 0,
 	}
 
@@ -135,15 +138,20 @@ type Tax struct {
 }
 
 func calculator(salary int, rule Rule) Calculate {
-	calculate := Calculate{
-		Endowment:               salary * rule.Endowment / 1000,
-		Medical:                 salary*rule.Medical/1000 + rule.MedicalPlus,
-		MedicalInput:            salary * rule.MedicalInput / 1000,
-		Birth:                   salary * rule.Birth / 1000,
-		Unemployment:            salary * rule.Unemployment / 1000,
-		IndustrialInjury:        salary * rule.IndustrialInjury / 1000,
-		HousingAccumulationFund: salary * rule.HousingAccumulationFund / 1000,
+	baseMoney := salary
+	if baseMoney > rule.BaseLimit {
+		baseMoney = rule.BaseLimit
 	}
+	calculate := Calculate{
+		Endowment:               baseMoney * rule.Endowment / 1000,
+		Medical:                 baseMoney*rule.Medical/1000 + rule.MedicalPlus,
+		MedicalInput:            baseMoney * rule.MedicalInput / 1000,
+		Birth:                   baseMoney * rule.Birth / 1000,
+		Unemployment:            baseMoney * rule.Unemployment / 1000,
+		IndustrialInjury:        baseMoney * rule.IndustrialInjury / 1000,
+		HousingAccumulationFund: baseMoney * rule.HousingAccumulationFund / 1000,
+	}
+
 	calculate.InsuranceSalary = salary - calculate.Endowment - calculate.Medical - calculate.Birth - calculate.Unemployment - calculate.IndustrialInjury - calculate.HousingAccumulationFund
 
 	taxes := getTaxTable()
